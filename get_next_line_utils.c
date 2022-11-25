@@ -6,7 +6,7 @@
 /*   By: jralph <jralph@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 15:10:06 by jralph            #+#    #+#             */
-/*   Updated: 2022/11/23 13:27:21 by jralph           ###   ########.fr       */
+/*   Updated: 2022/11/24 10:59:08 by jralph           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_cpy(char *res, char const *s, size_t start)
 	size_t	i;
 
 	i = start;
-	while (*s)
+	while (s && *s)
 	{
 		res[i] = *s;
 		s++;
@@ -32,11 +32,11 @@ char	*ft_getlines(char *stash, size_t len)
 
 	i = 0;
 	res = malloc (sizeof(char) * (len + 1));
-	while (stash[i] && stash[i] != '\n')
+	while (stash[i] && i < len)
 	{
 		res[i] = stash[i];
 		i++;
 	}
-	res[i] = '\0';
+	res[i] = 0;
 	return (res);
 }

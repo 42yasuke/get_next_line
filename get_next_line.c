@@ -6,7 +6,7 @@
 /*   By: jralph <jralph@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 15:10:16 by jralph            #+#    #+#             */
-/*   Updated: 2022/11/23 13:23:39 by jralph           ###   ########.fr       */
+/*   Updated: 2022/11/24 19:50:49 by jralph           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@ static size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	while (s[i])
-		i++;
+	if(s)
+	{
+		while (s[i] != '\0')
+			i++;
+	}
 	return (i);
 }
 
@@ -31,19 +34,19 @@ static char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-static void	*ft_memmove(void *dest, const void *src)
+static void	*ft_memmove(void *dest, const void *src) 
 {
 	size_t	i;
 
 	i = 0;
-	while (src[i])
+	while (((char *)src)[i])
 	{
 		((char *)dest)[i] = ((char *)src)[i];
 		i++;
 	}
-	while (dest[i])
+	while (((char *)dest)[i])
 	{
-		dest[i] = '\0';
+		((char *)dest)[i] = '\0';
 		i++;
 	}
 	return (dest);
@@ -55,9 +58,9 @@ static char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	len;
 
 	len = 1;
-	if (*s1)
+	if (s1)
 		len += ft_strlen(s1);
-	if (*s2)
+	if (s2)
 		len += ft_strlen(s2);
 	res = malloc (sizeof(*s1) * len);
 	if (!res)
@@ -76,30 +79,38 @@ char	*get_next_line(int fd)
 	char		*tmp;
 	size_t		len;
 
+	lines = NULL;
+	len = BUFFER_SIZE;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	len = 1;
-	while (len > 0)
+	while (len == BUFFER_SIZE)
 	{
 		len = read(fd, buf, BUFFER_SIZE);
 		buf[len] = '\0';
 		tmp = stash;
 		stash = ft_strjoin(stash, buf);
-		free(tmp);
-		if (ft_strchr(stash, '\n'))
+		if (tmp)
+			free(tmp);
+		if (ft_strchr(stash, '\n') || !(*stash))
 			break ;
 	}
 	if (ft_strchr(stash, '\n'))
 	{
-		lines = ft_getlines(stash, ft_strchr(stash, '\n') - stash);
-		stash = ft_memmove(stash, ft_strchr(stash, '\n'));
+		lines = ft_getlines(stash, ft_strchr(stash, '\n') - stash + 1);
+		stash = ft_memmove(stash, ft_strchr(stash, '\n') + 1);
 	}
-	else if (len < BUFFER_SIZE)
+	else 
 	{
+		if (!*stash)
+		{
+			free(stash);
+			return (NULL);
+		}
 		lines = malloc(sizeof(char) * (ft_strlen(stash) + 1));
 		ft_cpy(lines, stash, 0);
 		lines[ft_strlen(stash)] = '\0';
 		free(stash);
+		stash = NULL;
 	}
 	return (lines);
 }
