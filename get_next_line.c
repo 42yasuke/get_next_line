@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jralph <jralph@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jose <jose@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 15:10:16 by jralph            #+#    #+#             */
-/*   Updated: 2022/11/24 19:50:49 by jralph           ###   ########.fr       */
+/*   Updated: 2022/11/28 11:37:53 by jose             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,14 @@ static size_t	ft_strlen(const char *s)
 
 static char	*ft_strchr(const char *s, int c)
 {
-	while (*s && *s != (char)c)
-		s++;
-	if (*s == (char)c)
-		return ((char *)s);
-	return (0);
+	if (s)
+	{
+		while (*s && *s != (char)c)
+			s++;
+		if (*s == (char)c)
+			return ((char *)s);
+	}
+	return (NULL);
 }
 
 static void	*ft_memmove(void *dest, const void *src) 
@@ -79,38 +82,33 @@ char	*get_next_line(int fd)
 	char		*tmp;
 	size_t		len;
 
-	lines = NULL;
 	len = BUFFER_SIZE;
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buf, 0) < 0)
 		return (NULL);
-	while (len == BUFFER_SIZE)
+	while (!ft_strchr(stash, '\n') && len == BUFFER_SIZE)
 	{
 		len = read(fd, buf, BUFFER_SIZE);
+		if (len == 0)
+			break;
 		buf[len] = '\0';
 		tmp = stash;
-		stash = ft_strjoin(stash, buf);
-		if (tmp)
-			free(tmp);
-		if (ft_strchr(stash, '\n') || !(*stash))
-			break ;
+		stash = ft_strjoin(tmp, buf);
+		free(tmp);
 	}
 	if (ft_strchr(stash, '\n'))
 	{
 		lines = ft_getlines(stash, ft_strchr(stash, '\n') - stash + 1);
 		stash = ft_memmove(stash, ft_strchr(stash, '\n') + 1);
+		return (lines);
 	}
-	else 
+	else if (stash && *stash)
 	{
-		if (!*stash)
-		{
-			free(stash);
-			return (NULL);
-		}
 		lines = malloc(sizeof(char) * (ft_strlen(stash) + 1));
 		ft_cpy(lines, stash, 0);
 		lines[ft_strlen(stash)] = '\0';
 		free(stash);
 		stash = NULL;
+		return (lines);
 	}
-	return (lines);
+	return (NULL);
 }
