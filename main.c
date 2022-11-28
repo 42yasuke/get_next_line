@@ -4,7 +4,8 @@
 
 #include "get_next_line.h"
 
-int main() {
+int main() 
+{
 	int	fd = open("test.txt", O_RDONLY);
 	int	i = 0;
 	char *line;
