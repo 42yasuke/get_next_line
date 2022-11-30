@@ -28,7 +28,7 @@ size_t	ft_strlen(const char *s);
 # endif
 
 # ifndef FD_MAX
-#  define FD_MAX
+#  define FD_MAX 1024
 # endif
 
 #endif

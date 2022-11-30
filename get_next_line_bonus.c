@@ -74,12 +74,12 @@ static char	*ft_last_line(char **stash)
 
 char	*get_next_line(int fd)
 {
-	static char		*stash[1024 + 1];
+	static char		*stash[FD_MAX + 1];
 	char			*lines;
 	char			*buf[1];
 
 	lines = NULL;
-	stash[1024] = NULL;
+	stash[FD_MAX] = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buf, 0) < 0)
 		return (NULL);
 	ft_loop(&stash[fd], fd);
