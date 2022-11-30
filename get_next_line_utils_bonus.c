@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jralph <jralph@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/22 15:10:06 by jralph            #+#    #+#             */
-/*   Updated: 2022/11/29 17:30:44 by jralph           ###   ########.fr       */
+/*   Created: 2022/11/30 18:01:31 by jralph            #+#    #+#             */
+/*   Updated: 2022/11/30 18:03:20 by jralph           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	ft_cpy(char *res, char const *s, size_t start)
 {

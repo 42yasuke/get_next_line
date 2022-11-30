@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jralph <jralph@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/22 15:10:16 by jralph            #+#    #+#             */
-/*   Updated: 2022/11/29 17:42:19 by jralph           ###   ########.fr       */
+/*   Created: 2022/11/30 18:01:39 by jralph            #+#    #+#             */
+/*   Updated: 2022/11/30 20:27:49 by jralph           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static void	*ft_memmove(void *dest, const void *src)
 {
@@ -34,9 +34,12 @@ static void	ft_loop(char **stash, int fd)
 {
 	char		*tmp;
 	size_t		len;
-	static char	buf[BUFFER_SIZE + 1];
+	char		*buf;
 
 	len = BUFFER_SIZE;
+	buf = malloc (sizeof(*buf) * (BUFFER_SIZE + 1));
+	if (!buf)
+		return ;
 	while (!ft_strchr(*stash, '\n') && len == BUFFER_SIZE)
 	{
 		len = read(fd, buf, BUFFER_SIZE);
@@ -52,6 +55,7 @@ static void	ft_loop(char **stash, int fd)
 		}
 		free(tmp);
 	}
+	free(buf);
 }
 
 static char	*ft_last_line(char **stash)
@@ -70,26 +74,28 @@ static char	*ft_last_line(char **stash)
 
 char	*get_next_line(int fd)
 {
-	static char		buf[BUFFER_SIZE + 1];
-	static char		*stash = NULL;
+	static char		*stash[1024 + 1];
 	char			*lines;
+	char			*buf[1];
 
 	lines = NULL;
+	stash[1024] = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buf, 0) < 0)
 		return (NULL);
-	ft_loop(&stash, fd);
-	if (ft_strchr(stash, '\n'))
+	ft_loop(&stash[fd], fd);
+	if (ft_strchr(stash[fd], '\n'))
 	{
-		lines = ft_getlines(stash, ft_strchr(stash, '\n') - stash + 1);
+		lines = ft_getlines(stash[fd], ft_strchr(stash[fd], \
+		'\n') - stash[fd] + 1);
 		if (!lines)
 		{
-			free(stash);
+			free(stash[fd]);
 			return (NULL);
 		}
-		stash = ft_memmove(stash, ft_strchr(stash, '\n') + 1);
+		stash[fd] = ft_memmove(stash[fd], ft_strchr(stash[fd], '\n') + 1);
 		return (lines);
 	}
-	else if (stash && *stash)
-		return (ft_last_line(&stash));
+	else if (stash[fd] && *stash[fd])
+		return (ft_last_line(&stash[fd]));
 	return (NULL);
 }
