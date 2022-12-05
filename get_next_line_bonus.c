@@ -33,7 +33,7 @@ static void	*ft_memmove(void *dest, const void *src)
 static void	ft_loop(char **stash, int fd)
 {
 	char		*tmp;
-	size_t		len;
+	int			len;
 	char		*buf;
 
 	len = BUFFER_SIZE;
@@ -43,7 +43,7 @@ static void	ft_loop(char **stash, int fd)
 	while (!ft_strchr(*stash, '\n') && len == BUFFER_SIZE)
 	{
 		len = read(fd, buf, BUFFER_SIZE);
-		if (len == 0)
+		if (len <= 0)
 			break ;
 		buf[len] = '\0';
 		tmp = *stash;
@@ -76,11 +76,10 @@ char	*get_next_line(int fd)
 {
 	static char		*stash[FD_MAX + 1];
 	char			*lines;
-	char			*buf[1];
 
 	lines = NULL;
 	stash[FD_MAX] = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buf, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > FD_MAX)
 		return (NULL);
 	ft_loop(&stash[fd], fd);
 	if (ft_strchr(stash[fd], '\n'))

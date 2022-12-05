@@ -33,14 +33,14 @@ static void	*ft_memmove(void *dest, const void *src)
 static void	ft_loop(char **stash, int fd)
 {
 	char		*tmp;
-	size_t		len;
+	int			len;
 	static char	buf[BUFFER_SIZE + 1];
 
 	len = BUFFER_SIZE;
 	while (!ft_strchr(*stash, '\n') && len == BUFFER_SIZE)
 	{
 		len = read(fd, buf, BUFFER_SIZE);
-		if (len == 0)
+		if (len <= 0)
 			break ;
 		buf[len] = '\0';
 		tmp = *stash;
@@ -70,12 +70,11 @@ static char	*ft_last_line(char **stash)
 
 char	*get_next_line(int fd)
 {
-	static char		buf[BUFFER_SIZE + 1];
 	static char		*stash = NULL;
 	char			*lines;
 
 	lines = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buf, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	ft_loop(&stash, fd);
 	if (ft_strchr(stash, '\n'))

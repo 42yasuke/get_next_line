@@ -27,6 +27,11 @@ size_t	ft_strlen(const char *s);
 #  define BUFFER_SIZE 42
 # endif
 
+# if BUFFER_SIZE < 0
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 0
+# endif
+
 # ifndef FD_MAX
 #  define FD_MAX 1024
 # endif
