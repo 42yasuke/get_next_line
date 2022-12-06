@@ -34,9 +34,10 @@ static void	ft_loop(char **stash, int fd)
 {
 	char		*tmp;
 	int			len;
-	static char	buf[BUFFER_SIZE + 1];
+	char		*buf;
 
 	len = BUFFER_SIZE;
+	buf = malloc(sizeof(*buf) * (BUFFER_SIZE + 1));
 	while (!ft_strchr(*stash, '\n') && len == BUFFER_SIZE)
 	{
 		len = read(fd, buf, BUFFER_SIZE);
@@ -48,10 +49,12 @@ static void	ft_loop(char **stash, int fd)
 		if (!*stash)
 		{
 			*stash = NULL;
+			free(tmp);
 			return ;
 		}
 		free(tmp);
 	}
+	free(buf);
 }
 
 static char	*ft_last_line(char **stash)
@@ -90,5 +93,5 @@ char	*get_next_line(int fd)
 	}
 	else if (stash && *stash)
 		return (ft_last_line(&stash));
-	return (NULL);
+	return (free(stash), NULL);
 }

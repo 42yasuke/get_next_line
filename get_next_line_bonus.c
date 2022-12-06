@@ -96,5 +96,5 @@ char	*get_next_line(int fd)
 	}
 	else if (stash[fd] && *stash[fd])
 		return (ft_last_line(&stash[fd]));
-	return (NULL);
+	return (free(stash), NULL);
 }
