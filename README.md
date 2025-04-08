@@ -6,15 +6,11 @@
 
 L'objectif de ce projet est de créer une fonction qui lit une ligne d'un fichier à chaque appel. Cette fonction doit gérer les fichiers de manière optimale, sans gaspiller de mémoire ni de ressources. Tu dois implémenter cette fonction de manière indépendante, sans utiliser des fonctions de bibliothèque telles que `getline`.
 
----
-
 ## 🧩 Fonctionnalités Implémentées
 
 - La fonction `get_next_line` doit lire une ligne de n'importe quel fichier ou de l'entrée standard.
 - Elle doit gérer les fichiers de manière optimisée, en utilisant des tampons (buffers) pour ne pas tout lire d'un coup.
 - La gestion des erreurs et de la mémoire doit être propre et efficace.
-
----
 
 ## 🧪 Compilation et Utilisation
 
@@ -65,5 +61,3 @@ int main()
     return 0;
 }
 ```
-
----
