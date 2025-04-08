@@ -46,14 +46,22 @@ make re
 
 ### Utilisation
 
-Une fois le projet compilé, tu peux utiliser `ft_printf` comme ceci :
+Une fois le projet compilé, tu peux utiliser get_next_line comme suit :
 
 ```c
-#include "ft_printf.h"
+#include "get_next_line.h"
+#include <stdio.h>
 
 int main()
 {
-    int result = ft_printf("Hello %s, your number is %d\n", "World", 42);
+    char *line;
+    int fd = open("myfile.txt", O_RDONLY);  // Ouvrir un fichier en lecture
+    while (get_next_line(fd, &line) > 0)    // Lire ligne par ligne
+    {
+        printf("Ligne lue : %s\n", line);
+        free(line);  // Libérer la mémoire après utilisation
+    }
+    close(fd);  // Fermer le fichier
     return 0;
 }
 ```
