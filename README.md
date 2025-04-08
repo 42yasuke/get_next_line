@@ -24,40 +24,38 @@ Le projet utilise un `Makefile` pour faciliter la compilation.
 
 ```bash
 make
+```
 
 Pour nettoyer les fichiers objets :
 
 ```bash
 make clean
+```
 
 Pour supprimer tous les fichiers compilés (objets + exécutable) :
 
 ```bash
 make fclean
+```
 
 Pour recompiler le projet :
 
 ```bash
 make re
+```
 
 ### Utilisation
 
-Une fois le projet compilé, tu peux utiliser get_next_line comme suit
+Une fois le projet compilé, tu peux utiliser `ft_printf` comme ceci :
 
 ```c
-#include "get_next_line.h"
-#include <stdio.h>
+#include "ft_printf.h"
 
 int main()
 {
-    char *line;
-    int fd = open("myfile.txt", O_RDONLY);  // Ouvrir un fichier en lecture
-    while (get_next_line(fd, &line) > 0)    // Lire ligne par ligne
-    {
-        printf("Ligne lue : %s\n", line);
-        free(line);  // Libérer la mémoire après utilisation
-    }
-    close(fd);  // Fermer le fichier
+    int result = ft_printf("Hello %s, your number is %d\n", "World", 42);
     return 0;
+}
+```
 
 ---
